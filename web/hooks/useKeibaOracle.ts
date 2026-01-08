@@ -28,7 +28,7 @@ const DEFAULT_STATE: OracleState = {
 
 export function useKeibaOracle() {
   // Connect to the CopilotKit agent
-  const { state, setState, run, isLoading } = useCoAgent<OracleState>({
+  const { state, setState, run, running } = useCoAgent<OracleState>({
     name: "keiba-oracle",
     initialState: DEFAULT_STATE,
   });
@@ -101,7 +101,7 @@ export function useKeibaOracle() {
   return {
     // State
     state: state || DEFAULT_STATE,
-    isLoading,
+    isLoading: running,
 
     // Derived state
     isActive: (state?.active_node || "idle") !== "idle",

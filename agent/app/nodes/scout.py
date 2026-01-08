@@ -128,7 +128,9 @@ Be thorough but efficient. Focus on:
         weather = "Unknown"
         sources = []
 
-        for candidate in response.candidates:
+        for candidate in response.candidates or []:
+            if candidate.content is None or candidate.content.parts is None:
+                continue
             for part in candidate.content.parts:
                 # Handle text response (thinking)
                 if hasattr(part, 'text') and part.text:
@@ -143,6 +145,8 @@ Be thorough but efficient. Focus on:
                 if hasattr(part, 'function_call') and part.function_call:
                     func_call = part.function_call
                     func_name = func_call.name
+                    if func_name is None:
+                        continue
                     func_args = dict(func_call.args) if func_call.args else {}
 
                     # Log tool call

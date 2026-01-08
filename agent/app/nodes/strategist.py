@@ -122,7 +122,9 @@ Please analyze this situation and provide your strategic recommendation.""")]
         thinking_content = ""
         response_content = ""
 
-        for candidate in response.candidates:
+        for candidate in response.candidates or []:
+            if candidate.content is None or candidate.content.parts is None:
+                continue
             for part in candidate.content.parts:
                 if hasattr(part, 'thought') and part.thought:
                     # This is the model's internal thinking - EXPLICITLY CAPTURED

@@ -151,7 +151,9 @@ Please evaluate this strategy and provide your risk assessment.""")]
         )
 
         response_text = ""
-        for candidate in response.candidates:
+        for candidate in response.candidates or []:
+            if candidate.content is None or candidate.content.parts is None:
+                continue
             for part in candidate.content.parts:
                 if hasattr(part, 'text') and part.text:
                     response_text = part.text
