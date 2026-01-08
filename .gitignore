@@ -1,0 +1,92 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# ======================
+# Frontend (Next.js)
+# ======================
+
+# dependencies
+node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+.next/
+/out/
+
+# production
+/build
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# ======================
+# Backend (Python)
+# ======================
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv
+venv/
+
+# Chroma database
+chroma_db/
+
+# ======================
+# Common
+# ======================
+
+# Environment files
+.env
+.env.local
+.env*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Misc
+*.pem
+
+# Uploads (temp files)
+backend/app/data/uploads/*
+!backend/app/data/uploads/.gitkeep
+
+# Vectorstore data
+backend/app/data/vectorstore/
+
+# Evaluation results
+backend/app/data/evaluation/results/
+
+nul

@@ -1,0 +1,28 @@
+{
+  "description": "just a wrapper of web/agent customized commands",
+  "scripts": {
+    "dev": "concurrently -k -n nextjs,python -c auto \"npm:dev:web\" \"npm run dev:agent\"",
+    "dev:web": "npm --prefix web run dev",
+    "dev:agent": "cd agent && uv run uvicorn app.main:app --port 8000",
+    "sync": "npm run sync:web && npm run sync:agent",
+    "sync:web": "npm --prefix web install",
+    "sync:agent": "cd agent && uv sync --upgrade",
+    "build:web": "npm --prefix web run build",
+    "start:web": "npm --prefix web run start",
+    "lint:web": "npm --prefix web run lint",
+    "typecheck": "npm run typecheck:web && npm run typecheck:agent",
+    "typecheck:web": "npm --prefix web run typecheck",
+    "typecheck:agent": "cd agent && uv run pyright",
+    "test": "npm run test:web && npm run test:agent",
+    "test:web": "npm --prefix web run test",
+    "test:agent": "cd agent && uv run pytest",
+    "test:coverage": "npm --prefix web run test:coverage",
+    "test:watch": "npm --prefix web run test:watch",
+    "release": "release-police"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "release-police": "^1.0.0"
+  },
+  "version": "0.1.0"
+}

@@ -1,0 +1,84 @@
+# Kelly Criterion Skill
+
+## Purpose
+Calculate optimal bet sizing using the Kelly Criterion formula to maximize long-term growth while managing risk.
+
+## Formula
+```
+f* = (bp - q) / b
+```
+
+Where:
+- **f*** = fraction of bankroll to bet (Kelly fraction)
+- **b** = odds received (decimal odds - 1)
+- **p** = probability of winning (your edge)
+- **q** = probability of losing (1 - p)
+
+## Example Calculation
+If you believe a horse has a 40% chance of winning at 3.0 decimal odds:
+- p = 0.40
+- q = 0.60
+- b = 3.0 - 1 = 2.0
+- f* = (2.0 × 0.40 - 0.60) / 2.0 = (0.80 - 0.60) / 2.0 = 0.10
+
+Kelly suggests betting 10% of bankroll.
+
+## Safety Guidelines
+
+### Hard Limits
+1. **NEVER** bet more than 25% of bankroll regardless of Kelly calculation
+2. Use **fractional Kelly** (50% of calculated) for safety margin
+3. If f* is negative, **DO NOT BET** - you have no edge
+
+### Confidence Adjustments
+| Confidence Level | Kelly Multiplier |
+|-----------------|------------------|
+| Very High (>85%) | 0.75 (75% Kelly) |
+| High (70-85%) | 0.50 (50% Kelly) |
+| Moderate (55-70%) | 0.25 (25% Kelly) |
+| Low (<55%) | 0.00 (No bet) |
+
+## Risk Thresholds
+
+### Risk Score Classification
+- **LOW** (0.0 - 0.3): f* < 0.05 - Safe to proceed
+- **MEDIUM** (0.3 - 0.5): 0.05 <= f* < 0.15 - Proceed with caution
+- **HIGH** (0.5 - 0.7): 0.15 <= f* < 0.25 - Requires review
+- **CRITICAL** (>0.7): f* >= 0.25 - REJECT or BACKTRACK
+
+## Audit Rules
+
+### Automatic Rejection Triggers
+1. kelly_fraction > 0.25 (exceeds max bet size)
+2. confidence_score < 0.50 AND kelly_fraction > 0.10
+3. risk_score > 0.70
+4. Missing critical data (racecourse, odds, or horse info)
+
+### Backtrack Conditions
+When any of the above triggers fire:
+1. Log the specific concern in reasoning_trace
+2. Set requires_backtrack = True
+3. Provide backtrack_reason
+4. Route back to Strategist for revision
+
+## Japanese Racing Specifics
+
+### JRA Grade Races Risk Adjustments
+- **G1 Races**: Higher variance, reduce Kelly by 25%
+- **G2/G3 Races**: Standard Kelly applies
+- **Open/Listed**: May increase Kelly by 10%
+
+### Track Condition Factors
+- **Good/Firm**: Standard risk calculation
+- **Soft/Yielding**: Increase risk score by 0.1
+- **Heavy**: Increase risk score by 0.2 (higher unpredictability)
+
+## Output Format
+
+When auditing, provide:
+```
+Risk Score: X.XX
+Decision: APPROVE / BACKTRACK
+Kelly Fraction: X.XX (adjusted from raw X.XX)
+Concerns: [list any issues]
+```
