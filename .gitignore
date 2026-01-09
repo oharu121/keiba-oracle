@@ -78,15 +78,4 @@ yarn-error.log*
 
 # Misc
 *.pem
-
-# Uploads (temp files)
-backend/app/data/uploads/*
-!backend/app/data/uploads/.gitkeep
-
-# Vectorstore data
-backend/app/data/vectorstore/
-
-# Evaluation results
-backend/app/data/evaluation/results/
-
 nul

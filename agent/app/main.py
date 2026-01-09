@@ -16,6 +16,19 @@ from copilotkit import CopilotKitSDK, LangGraphAGUIAgent
 from app.graph import graph
 from app.models import OracleState
 
+
+# Patch for CopilotKit bug #2891: Missing dict_repr method
+# See: https://github.com/CopilotKit/CopilotKit/issues/2891
+class PatchedLangGraphAGUIAgent(LangGraphAGUIAgent):
+    """Patched agent class that adds missing dict_repr method."""
+
+    def dict_repr(self):
+        """Return dictionary representation for CopilotKit /info endpoint."""
+        return {
+            "name": self.name,
+            "description": self.description or "",
+        }
+
 # Load environment variables
 load_dotenv()
 
@@ -51,10 +64,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Create CopilotKit SDK with LangGraph agent
+# Create CopilotKit SDK with patched LangGraph agent
 sdk = CopilotKitSDK(
     agents=[
-        LangGraphAGUIAgent(
+        PatchedLangGraphAGUIAgent(
             name="keiba-oracle",
             description="Japanese Horse Racing Analysis Agent with Scout, Strategist, and Auditor nodes",
             graph=graph,

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(uv run pytest:*)",
+      "Bash(uv run python:*)",
+      "Bash(curl:*)",
+      "Bash(pip index:*)",
+      "Bash(pip3 index:*)",
+      "Bash(git check-ignore:*)"
+    ]
+  }
+}
