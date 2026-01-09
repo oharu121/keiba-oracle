@@ -27,6 +27,7 @@ htmlcov/
 .env.local
 .env.example
 
-# Documentation (keep README for HF Spaces metadata)
-*.md
-!README.md
+# Documentation (exclude other markdown files)
+CHANGELOG.md
+CONTRIBUTING.md
+docs/

@@ -11,7 +11,8 @@ WORKDIR /app
 RUN pip install --no-cache-dir uv
 
 # Copy dependency files first for better caching
-COPY pyproject.toml uv.lock ./
+# README.md is required by pyproject.toml for hatchling build
+COPY pyproject.toml uv.lock README.md ./
 
 # Install dependencies (production only, no dev deps)
 RUN uv sync --frozen --no-dev
