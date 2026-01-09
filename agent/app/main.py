@@ -9,6 +9,7 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse, PlainTextResponse
 from copilotkit.integrations.fastapi import add_fastapi_endpoint
 from copilotkit import CopilotKitSDK, LangGraphAGUIAgent
 
@@ -67,18 +68,14 @@ add_fastapi_endpoint(app, sdk, "/copilotkit")
 
 @app.get("/")
 async def root():
-    """Root endpoint with API info."""
-    return {
-        "name": "Keiba Oracle Agent",
-        "version": "0.1.0",
-        "description": "Japanese Horse Racing Analysis with Explicit AI Reasoning",
-        "endpoints": {
-            "copilotkit": "/copilotkit",
-            "health": "/health",
-            "test": "/test",
-        },
-        "nodes": ["scout", "strategist", "auditor"],
-    }
+    """Redirect to API documentation."""
+    return RedirectResponse(url="/docs")
+
+
+@app.get("/healthz")
+async def healthz():
+    """Lightweight liveness probe for keep-alive pings."""
+    return PlainTextResponse("ok")
 
 
 @app.get("/health")
