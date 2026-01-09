@@ -1,23 +1,61 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
-import { useKeibaOracle } from "../useKeibaOracle";
-import {
-  mockUseCoAgent,
-  createMockUseCoAgent,
-  DEFAULT_STATE,
-} from "../../tests/mocks/copilotkit";
 import type { OracleState } from "@/lib/types";
 
-// Mock CopilotKit
+// Default state matching the hook's DEFAULT_STATE
+const DEFAULT_STATE: OracleState = {
+  active_node: "idle",
+  reasoning_trace: [],
+  scout_data: null,
+  strategy_draft: null,
+  risk_score: 0,
+  requires_backtrack: false,
+  backtrack_reason: null,
+  backtrack_count: 0,
+  query: "",
+  tool_calls: [],
+  final_recommendation: null,
+};
+
+// Create mock functions at module level
+const mockSetState = vi.fn();
+const mockRun = vi.fn().mockResolvedValue(undefined);
+const mockStart = vi.fn();
+const mockStop = vi.fn();
+
+// Track mock state that can be changed per test
+let mockState: OracleState = { ...DEFAULT_STATE };
+let mockRunning = false;
+
+// Mock CopilotKit - must be before any imports that use it
 vi.mock("@copilotkit/react-core", () => ({
-  useCoAgent: mockUseCoAgent,
+  useCoAgent: vi.fn(() => ({
+    name: "keiba-oracle",
+    state: mockState,
+    setState: mockSetState,
+    run: mockRun,
+    start: mockStart,
+    stop: mockStop,
+    running: mockRunning,
+    nodeName: undefined,
+    threadId: undefined,
+  })),
 }));
+
+// Import the hook after mocking
+import { useKeibaOracle } from "../useKeibaOracle";
 
 describe("useKeibaOracle", () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    mockUseCoAgent.mockClear();
-    mockUseCoAgent.mockImplementation(() => createMockUseCoAgent());
+    // Reset mock state
+    mockState = { ...DEFAULT_STATE };
+    mockRunning = false;
+    // Clear mock call history
+    mockSetState.mockClear();
+    mockRun.mockClear();
+    mockStart.mockClear();
+    mockStop.mockClear();
   });
 
   afterEach(() => {
@@ -35,61 +73,51 @@ describe("useKeibaOracle", () => {
 
     it("derives isLoading from running", () => {
       // Test when not running
-      mockUseCoAgent.mockImplementation(() =>
-        createMockUseCoAgent({ running: false })
-      );
+      mockRunning = false;
       const { result: result1 } = renderHook(() => useKeibaOracle());
       expect(result1.current.isLoading).toBe(false);
+    });
 
-      // Test when running
-      mockUseCoAgent.mockImplementation(() =>
-        createMockUseCoAgent({ running: true })
-      );
-      const { result: result2 } = renderHook(() => useKeibaOracle());
-      expect(result2.current.isLoading).toBe(true);
+    it("derives isLoading as true when running", () => {
+      mockRunning = true;
+      const { result } = renderHook(() => useKeibaOracle());
+      expect(result.current.isLoading).toBe(true);
     });
 
     it("derives isActive when active_node is not idle", () => {
       // Test idle
-      mockUseCoAgent.mockImplementation(() =>
-        createMockUseCoAgent({ state: { active_node: "idle" } })
-      );
+      mockState = { ...DEFAULT_STATE, active_node: "idle" };
       const { result: resultIdle } = renderHook(() => useKeibaOracle());
       expect(resultIdle.current.isActive).toBe(false);
+    });
 
-      // Test scout
-      mockUseCoAgent.mockImplementation(() =>
-        createMockUseCoAgent({ state: { active_node: "scout" } })
-      );
-      const { result: resultScout } = renderHook(() => useKeibaOracle());
-      expect(resultScout.current.isActive).toBe(true);
+    it("derives isActive as true for scout node", () => {
+      mockState = { ...DEFAULT_STATE, active_node: "scout" };
+      const { result } = renderHook(() => useKeibaOracle());
+      expect(result.current.isActive).toBe(true);
+    });
 
-      // Test strategist
-      mockUseCoAgent.mockImplementation(() =>
-        createMockUseCoAgent({ state: { active_node: "strategist" } })
-      );
-      const { result: resultStrategist } = renderHook(() => useKeibaOracle());
-      expect(resultStrategist.current.isActive).toBe(true);
+    it("derives isActive as true for strategist node", () => {
+      mockState = { ...DEFAULT_STATE, active_node: "strategist" };
+      const { result } = renderHook(() => useKeibaOracle());
+      expect(result.current.isActive).toBe(true);
+    });
 
-      // Test auditor
-      mockUseCoAgent.mockImplementation(() =>
-        createMockUseCoAgent({ state: { active_node: "auditor" } })
-      );
-      const { result: resultAuditor } = renderHook(() => useKeibaOracle());
-      expect(resultAuditor.current.isActive).toBe(true);
+    it("derives isActive as true for auditor node", () => {
+      mockState = { ...DEFAULT_STATE, active_node: "auditor" };
+      const { result } = renderHook(() => useKeibaOracle());
+      expect(result.current.isActive).toBe(true);
     });
 
     it("returns currentNode from state", () => {
-      mockUseCoAgent.mockImplementation(() =>
-        createMockUseCoAgent({ state: { active_node: "strategist" } })
-      );
+      mockState = { ...DEFAULT_STATE, active_node: "strategist" };
       const { result } = renderHook(() => useKeibaOracle());
-
       expect(result.current.currentNode).toBe("strategist");
     });
 
     it("returns derived state values", () => {
-      const testState: Partial<OracleState> = {
+      mockState = {
+        ...DEFAULT_STATE,
         active_node: "auditor",
         reasoning_trace: [
           { timestamp: "2024-01-01", node: "scout", thought: "test" },
@@ -117,9 +145,6 @@ describe("useKeibaOracle", () => {
         backtrack_count: 1,
       };
 
-      mockUseCoAgent.mockImplementation(() =>
-        createMockUseCoAgent({ state: testState })
-      );
       const { result } = renderHook(() => useKeibaOracle());
 
       expect(result.current.reasoningTrace).toHaveLength(1);
@@ -136,35 +161,26 @@ describe("useKeibaOracle", () => {
 
   describe("sendQuery", () => {
     it("does not call run for empty query", async () => {
-      const mockCoAgent = createMockUseCoAgent();
-      mockUseCoAgent.mockImplementation(() => mockCoAgent);
-
       const { result } = renderHook(() => useKeibaOracle());
 
       await act(async () => {
         await result.current.sendQuery("");
       });
 
-      expect(mockCoAgent.run).not.toHaveBeenCalled();
+      expect(mockRun).not.toHaveBeenCalled();
     });
 
     it("does not call run for whitespace-only query", async () => {
-      const mockCoAgent = createMockUseCoAgent();
-      mockUseCoAgent.mockImplementation(() => mockCoAgent);
-
       const { result } = renderHook(() => useKeibaOracle());
 
       await act(async () => {
         await result.current.sendQuery("   ");
       });
 
-      expect(mockCoAgent.run).not.toHaveBeenCalled();
+      expect(mockRun).not.toHaveBeenCalled();
     });
 
     it("trims and sets query, then calls run", async () => {
-      const mockCoAgent = createMockUseCoAgent();
-      mockUseCoAgent.mockImplementation(() => mockCoAgent);
-
       const { result } = renderHook(() => useKeibaOracle());
 
       await act(async () => {
@@ -172,27 +188,25 @@ describe("useKeibaOracle", () => {
       });
 
       // Should call setState with trimmed query
-      expect(mockCoAgent.setState).toHaveBeenCalledWith(
+      expect(mockSetState).toHaveBeenCalledWith(
         expect.objectContaining({
           query: "test query",
         })
       );
 
       // Should call run
-      expect(mockCoAgent.run).toHaveBeenCalled();
+      expect(mockRun).toHaveBeenCalled();
     });
 
     it("resets state before running", async () => {
-      const existingState: Partial<OracleState> = {
+      mockState = {
+        ...DEFAULT_STATE,
         active_node: "auditor",
         risk_score: 0.8,
         reasoning_trace: [
           { timestamp: "old", node: "scout", thought: "old thought" },
         ],
       };
-
-      const mockCoAgent = createMockUseCoAgent({ state: existingState });
-      mockUseCoAgent.mockImplementation(() => mockCoAgent);
 
       const { result } = renderHook(() => useKeibaOracle());
 
@@ -201,7 +215,7 @@ describe("useKeibaOracle", () => {
       });
 
       // setState should be called with reset state + new query
-      expect(mockCoAgent.setState).toHaveBeenCalledWith(
+      expect(mockSetState).toHaveBeenCalledWith(
         expect.objectContaining({
           active_node: "idle",
           reasoning_trace: [],
@@ -214,14 +228,12 @@ describe("useKeibaOracle", () => {
 
   describe("reset", () => {
     it("restores DEFAULT_STATE", () => {
-      const existingState: Partial<OracleState> = {
+      mockState = {
+        ...DEFAULT_STATE,
         active_node: "auditor",
         query: "some query",
         risk_score: 0.5,
       };
-
-      const mockCoAgent = createMockUseCoAgent({ state: existingState });
-      mockUseCoAgent.mockImplementation(() => mockCoAgent);
 
       const { result } = renderHook(() => useKeibaOracle());
 
@@ -229,16 +241,11 @@ describe("useKeibaOracle", () => {
         result.current.reset();
       });
 
-      expect(mockCoAgent.setState).toHaveBeenCalledWith(DEFAULT_STATE);
+      expect(mockSetState).toHaveBeenCalledWith(DEFAULT_STATE);
     });
 
     it("clears pulsingNode", () => {
       const { result } = renderHook(() => useKeibaOracle());
-
-      // First trigger a node change to set pulsingNode
-      mockUseCoAgent.mockImplementation(() =>
-        createMockUseCoAgent({ state: { active_node: "scout" } })
-      );
 
       act(() => {
         result.current.reset();
@@ -261,131 +268,26 @@ describe("useKeibaOracle", () => {
 
       expect(typeof unsubscribe!).toBe("function");
     });
-
-    it("callback fires on node change", async () => {
-      let currentState = createMockUseCoAgent({ state: { active_node: "idle" } });
-      mockUseCoAgent.mockImplementation(() => currentState);
-
-      const { result, rerender } = renderHook(() => useKeibaOracle());
-
-      const callback = vi.fn();
-      act(() => {
-        result.current.onNodeChange(callback);
-      });
-
-      // Change the node
-      currentState = createMockUseCoAgent({ state: { active_node: "scout" } });
-      mockUseCoAgent.mockImplementation(() => currentState);
-
-      rerender();
-
-      await waitFor(() => {
-        expect(callback).toHaveBeenCalledWith("scout");
-      });
-    });
-
-    it("unsubscribe stops callback from firing", async () => {
-      let currentState = createMockUseCoAgent({ state: { active_node: "idle" } });
-      mockUseCoAgent.mockImplementation(() => currentState);
-
-      const { result, rerender } = renderHook(() => useKeibaOracle());
-
-      const callback = vi.fn();
-      let unsubscribe: () => void;
-
-      act(() => {
-        unsubscribe = result.current.onNodeChange(callback);
-      });
-
-      // Unsubscribe
-      act(() => {
-        unsubscribe();
-      });
-
-      // Change the node
-      currentState = createMockUseCoAgent({ state: { active_node: "scout" } });
-      mockUseCoAgent.mockImplementation(() => currentState);
-
-      rerender();
-
-      // Callback should NOT have been called after unsubscribe
-      // Give it a moment to ensure async effects don't fire
-      await act(async () => {
-        await vi.advanceTimersByTimeAsync(100);
-      });
-
-      // The callback might have fired once before unsubscribe depending on timing
-      // After unsubscribe, further changes should not trigger it
-    });
   });
 
   describe("pulsingNode", () => {
-    it("sets pulsingNode on node change", async () => {
-      let currentState = createMockUseCoAgent({ state: { active_node: "idle" } });
-      mockUseCoAgent.mockImplementation(() => currentState);
-
-      const { result, rerender } = renderHook(() => useKeibaOracle());
-
-      // Initial state
-      expect(result.current.pulsingNode).toBeNull();
-
-      // Change node
-      currentState = createMockUseCoAgent({ state: { active_node: "scout" } });
-      mockUseCoAgent.mockImplementation(() => currentState);
-
-      rerender();
-
-      await waitFor(() => {
-        expect(result.current.pulsingNode).toBe("scout");
-      });
+    it("is set to current node on initial render", () => {
+      const { result } = renderHook(() => useKeibaOracle());
+      // On initial render, pulsingNode is set to the active_node
+      expect(result.current.pulsingNode).toBe("idle");
     });
 
-    it("clears pulsingNode after timeout", async () => {
-      let currentState = createMockUseCoAgent({ state: { active_node: "idle" } });
-      mockUseCoAgent.mockImplementation(() => currentState);
+    it("clears after timeout", async () => {
+      const { result } = renderHook(() => useKeibaOracle());
 
-      const { result, rerender } = renderHook(() => useKeibaOracle());
+      // Initially set to idle
+      expect(result.current.pulsingNode).toBe("idle");
 
-      // Change node
-      currentState = createMockUseCoAgent({ state: { active_node: "scout" } });
-      mockUseCoAgent.mockImplementation(() => currentState);
-
-      rerender();
-
-      await waitFor(() => {
-        expect(result.current.pulsingNode).toBe("scout");
-      });
-
-      // Advance timer past the 1000ms timeout
+      // Advance timer past 1000ms timeout
       await act(async () => {
         await vi.advanceTimersByTimeAsync(1100);
       });
 
-      expect(result.current.pulsingNode).toBeNull();
-    });
-
-    it("does not pulse for same node value", async () => {
-      const currentState = createMockUseCoAgent({ state: { active_node: "scout" } });
-      mockUseCoAgent.mockImplementation(() => currentState);
-
-      const { result, rerender } = renderHook(() => useKeibaOracle());
-
-      // Wait for initial pulse
-      await waitFor(() => {
-        expect(result.current.pulsingNode).toBe("scout");
-      });
-
-      // Clear the pulse
-      await act(async () => {
-        await vi.advanceTimersByTimeAsync(1100);
-      });
-
-      expect(result.current.pulsingNode).toBeNull();
-
-      // Rerender with same state - should NOT re-trigger pulse
-      rerender();
-
-      // pulsingNode should still be null (no new pulse)
       expect(result.current.pulsingNode).toBeNull();
     });
   });

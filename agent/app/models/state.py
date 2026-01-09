@@ -5,7 +5,7 @@ Every field is explicitly exposed - no black boxes.
 The reasoning_trace is THE KEY requirement for explicit AI transparency.
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
 from enum import Enum
 
@@ -93,5 +93,4 @@ class OracleState(BaseModel):
     # Final output
     final_recommendation: Optional[str] = None
 
-    class Config:
-        use_enum_values = True
+    model_config = ConfigDict(use_enum_values=True)

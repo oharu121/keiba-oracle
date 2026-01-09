@@ -109,20 +109,30 @@ class TestScoutRacecourseExtraction:
 
 
 class TestScoutTrackConditionExtraction:
-    """Tests for track condition extraction."""
+    """Tests for track condition extraction from search results."""
 
-    @pytest.mark.parametrize("keywords,expected", [
-        (["good", "firm"], "Good"),
-        (["soft", "yielding"], "Soft"),
-        (["heavy"], "Heavy"),
+    @pytest.mark.parametrize("keyword,expected", [
+        ("good", "Good"),
+        ("firm", "Good"),
+        ("soft", "Soft"),
+        ("yielding", "Soft"),
+        ("heavy", "Heavy"),
     ])
     def test_extracts_track_condition(
-        self, keywords, expected, state_with_query, mock_gemini_client, mock_gemini_text_response
+        self, keyword, expected, state_with_query, mock_gemini_client, mock_search_tools
     ):
-        """Test track condition extraction from results."""
-        # Test with first keyword
-        mock_gemini_client.models.generate_content.return_value = mock_gemini_text_response(
-            f"The track is {keywords[0]} today."
+        """Test track condition extraction from tool call results."""
+        from tests.conftest import create_mock_gemini_response
+
+        # Mock search tool to return result with track condition keyword
+        mock_search_tools["racecourse"].invoke.return_value = f"Track condition: {keyword}. Weather: normal."
+
+        # Gemini returns a tool call
+        mock_gemini_client.models.generate_content.return_value = create_mock_gemini_response(
+            function_calls=[{
+                "name": "search_racecourse_conditions",
+                "args": {"query": "Tokyo conditions"}
+            }]
         )
 
         result = scout_node(state_with_query)
@@ -141,19 +151,29 @@ class TestScoutTrackConditionExtraction:
 
 
 class TestScoutWeatherExtraction:
-    """Tests for weather extraction."""
+    """Tests for weather extraction from search results."""
 
-    @pytest.mark.parametrize("keywords,expected", [
-        (["clear", "sunny"], "Clear"),
-        (["rain", "rainy"], "Rainy"),
-        (["cloudy"], "Cloudy"),
+    @pytest.mark.parametrize("keyword,expected", [
+        ("clear", "Clear"),
+        ("sunny", "Clear"),
+        ("rain", "Rainy"),
+        ("cloudy", "Cloudy"),
     ])
     def test_extracts_weather(
-        self, keywords, expected, state_with_query, mock_gemini_client, mock_gemini_text_response
+        self, keyword, expected, state_with_query, mock_gemini_client, mock_search_tools
     ):
-        """Test weather extraction from results."""
-        mock_gemini_client.models.generate_content.return_value = mock_gemini_text_response(
-            f"Weather is {keywords[0]}."
+        """Test weather extraction from tool call results."""
+        from tests.conftest import create_mock_gemini_response
+
+        # Mock search tool to return result with weather keyword
+        mock_search_tools["racecourse"].invoke.return_value = f"Track: normal. Weather: {keyword}."
+
+        # Gemini returns a tool call
+        mock_gemini_client.models.generate_content.return_value = create_mock_gemini_response(
+            function_calls=[{
+                "name": "search_racecourse_conditions",
+                "args": {"query": "Tokyo conditions"}
+            }]
         )
 
         result = scout_node(state_with_query)
