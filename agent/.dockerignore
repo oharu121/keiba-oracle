@@ -1,0 +1,32 @@
+# Version control
+.git/
+.gitignore
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+
+# Testing
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment files (secrets set via HF Spaces settings)
+.env
+.env.local
+.env.example
+
+# Documentation (keep README for HF Spaces metadata)
+*.md
+!README.md
