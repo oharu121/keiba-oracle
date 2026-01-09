@@ -5,6 +5,33 @@ All notable changes to Keiba Oracle will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-01-09
+
+### Added
+
+#### Testing
+- **Backend tests** (pytest): 120 tests covering models, scout, strategist, and auditor nodes
+- **Frontend tests** (Vitest): 18 tests for `useKeibaOracle` hook with CopilotKit mocks
+- Test fixtures in `agent/tests/conftest.py` for mocking Gemini and Tavily APIs
+
+#### Deployment
+- **Dockerfile** for Hugging Face Spaces deployment
+- **.dockerignore** to exclude tests, venv, and dev files from Docker build
+- CORS configuration for Vercel frontend (`https://keiba-oracle.vercel.app`)
+
+### Changed
+
+- **CopilotKit integration**: Updated from `LangGraphAgent` to `LangGraphAGUIAgent` (API change in copilotkit 0.1.74)
+- **Pydantic config**: Migrated from deprecated `class Config` to `model_config = ConfigDict(...)` (Pydantic v2)
+- **useCoAgent hook**: Fixed usage of `running` property (not `isLoading`) per CopilotKit API
+
+### Fixed
+
+- **Gemini API null checks**: Added guards for `response.candidates` and `candidate.content.parts` being `None`
+- **Scout node**: Added null check for `func_call.name` which can be `str | None`
+
+---
+
 ## [0.1.0] - 2026-01-07
 
 ### Added
@@ -61,4 +88,5 @@ START → Scout → Strategist → Auditor → END
 
 ---
 
+[0.2.0]: https://github.com/user/keiba-oracle/releases/tag/v0.2.0
 [0.1.0]: https://github.com/user/keiba-oracle/releases/tag/v0.1.0

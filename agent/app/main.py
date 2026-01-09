@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from copilotkit.integrations.fastapi import add_fastapi_endpoint
-from copilotkit import CopilotKitSDK, LangGraphAgent
+from copilotkit import CopilotKitSDK, LangGraphAGUIAgent
 
 from app.graph import graph
 from app.models import OracleState
@@ -53,7 +53,7 @@ app.add_middleware(
 # Create CopilotKit SDK with LangGraph agent
 sdk = CopilotKitSDK(
     agents=[
-        LangGraphAgent(
+        LangGraphAGUIAgent(
             name="keiba-oracle",
             description="Japanese Horse Racing Analysis Agent with Scout, Strategist, and Auditor nodes",
             graph=graph,
