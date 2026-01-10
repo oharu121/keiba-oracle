@@ -51,7 +51,7 @@ export const GET = async () => {
   return new Response(
     JSON.stringify({
       configured: !!agentUrl,
-      agentUrl: agentUrl ? `${agentUrl.slice(-10)}...` : null,
+      agentUrl: agentUrl ? `...${agentUrl.slice(-20)}` : null,
     }),
     { status: 200, headers: { "Content-Type": "application/json" } }
   );
