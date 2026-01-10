@@ -12,10 +12,23 @@ import {
  * via CopilotKit's AG-UI protocol.
  */
 export const POST = async (req: NextRequest) => {
+  const agentUrl = process.env.AGENT_URL;
+
+  if (!agentUrl) {
+    console.error("AGENT_URL environment variable is not configured");
+    return new Response(
+      JSON.stringify({
+        error: "configuration_error",
+        message: "AGENT_URL environment variable is not configured. Please set it in Vercel dashboard.",
+      }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
   const runtime = new CopilotRuntime({
     remoteEndpoints: [
       {
-        url: process.env.AGENT_URL || "http://localhost:8000/copilotkit",
+        url: agentUrl,
       },
     ],
   });
