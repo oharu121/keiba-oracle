@@ -5,6 +5,21 @@ All notable changes to Keiba Oracle will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.4] - 2026-01-11
+
+### Fixed
+
+- **CopilotKit agent registration**: Switched from `remoteEndpoints: [{ url }]` to `LangGraphAgent`
+  configuration because `CopilotRuntime.assignEndpointsToAgents()` returns empty object for basic
+  `CopilotKitEndpoint` type, causing "Agent not found" error on frontend
+
+### Changed
+
+- **API route**: Now uses `LangGraphAgent` from `@copilotkit/runtime/langgraph` with explicit
+  `agents` configuration instead of `remoteEndpoints`
+
+---
+
 ## [0.2.3] - 2026-01-10
 
 ### Fixed
@@ -116,6 +131,7 @@ START → Scout → Strategist → Auditor → END
 
 ---
 
+[0.2.4]: https://github.com/user/keiba-oracle/releases/tag/v0.2.4
 [0.2.3]: https://github.com/user/keiba-oracle/releases/tag/v0.2.3
 [0.2.2]: https://github.com/user/keiba-oracle/releases/tag/v0.2.2
 [0.2.1]: https://github.com/user/keiba-oracle/releases/tag/v0.2.1

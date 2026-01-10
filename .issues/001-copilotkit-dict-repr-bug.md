@@ -45,5 +45,46 @@ This is documented in:
 - `agent/app/main.py` (comment)
 
 ### Status
-- [x] Documentation added (v0.2.2)
+- [x] Documentation added (v0.2.3)
 - [ ] Upstream fix released (CopilotKit SDK handles both URL formats)
+
+---
+
+## Issue 3: CopilotRuntime remoteEndpoints returns empty agents
+
+Using `remoteEndpoints: [{ url: agentUrl }]` configuration in `CopilotRuntime` does not
+properly register agents, causing "Agent not found" error on frontend.
+
+### Root Cause
+In CopilotKit v1.50.0, the `assignEndpointsToAgents()` method in `CopilotRuntime` always
+returns an empty object for basic `CopilotKitEndpoint` type. The configuration is accepted
+but does not create agents.
+
+From `node_modules/@copilotkit/runtime/src/lib/runtime/copilot-runtime.ts`:
+```typescript
+private assignEndpointsToAgents(...): Record<string, AbstractAgent> {
+  let result: Record<string, AbstractAgent> = {};
+  // ... LangGraphPlatformEndpoint throws deprecation error
+  return result;  // <-- ALWAYS RETURNS EMPTY FOR CopilotKitEndpoint!
+}
+```
+
+### Fix
+Use `LangGraphAgent` from `@copilotkit/runtime/langgraph` with explicit `agents` configuration:
+
+```typescript
+import { LangGraphAgent } from "@copilotkit/runtime/langgraph";
+
+const runtime = new CopilotRuntime({
+  agents: {
+    "keiba-oracle": new LangGraphAgent({
+      deploymentUrl: agentUrl,
+      graphId: "keiba_oracle",
+    }),
+  },
+});
+```
+
+### Status
+- [x] Fix applied (v0.2.4)
+- [ ] Upstream documentation clarifies this behavior

@@ -4,12 +4,17 @@ import {
   copilotRuntimeNextJSAppRouterEndpoint,
   ExperimentalEmptyAdapter,
 } from "@copilotkit/runtime";
+import { LangGraphAgent } from "@copilotkit/runtime/langgraph";
 
 /**
  * CopilotKit API Route for Keiba Oracle.
  *
  * Connects the Next.js frontend to the Python LangGraph backend
  * via CopilotKit's AG-UI protocol.
+ *
+ * Note: Uses LangGraphAgent instead of remoteEndpoints because
+ * CopilotRuntime's remoteEndpoints with basic { url } config
+ * does not properly register agents (returns empty agents list).
  */
 export const POST = async (req: NextRequest) => {
   const agentUrl = process.env.AGENT_URL;
@@ -26,11 +31,12 @@ export const POST = async (req: NextRequest) => {
   }
 
   const runtime = new CopilotRuntime({
-    remoteEndpoints: [
-      {
-        url: agentUrl,
-      },
-    ],
+    agents: {
+      "keiba-oracle": new LangGraphAgent({
+        deploymentUrl: agentUrl,
+        graphId: "keiba_oracle",
+      }),
+    },
   });
 
   const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({

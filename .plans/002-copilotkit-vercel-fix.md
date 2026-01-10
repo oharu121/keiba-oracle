@@ -72,6 +72,29 @@ AGENT_URL=https://your-backend.hf.space/copilotkit/
 AGENT_URL=https://your-backend.hf.space/copilotkit
 ```
 
+## Issue 3: CopilotRuntime remoteEndpoints returns empty agents (RESOLVED)
+
+**Root Cause:** CopilotKit v1.50.0's `assignEndpointsToAgents()` method always returns empty
+object for basic `CopilotKitEndpoint` type. The `remoteEndpoints: [{ url }]` configuration
+is accepted but does not create agents.
+
+**Fix:** Switch to `LangGraphAgent` from `@copilotkit/runtime/langgraph`:
+
+```typescript
+import { LangGraphAgent } from "@copilotkit/runtime/langgraph";
+
+const runtime = new CopilotRuntime({
+  agents: {
+    "keiba-oracle": new LangGraphAgent({
+      deploymentUrl: agentUrl,
+      graphId: "keiba_oracle",
+    }),
+  },
+});
+```
+
+**Status:** ✅ Fixed in v0.2.4
+
 ## Versions
 
 - copilotkit Python SDK: 0.1.74
