@@ -41,3 +41,18 @@ export const POST = async (req: NextRequest) => {
 
   return handleRequest(req);
 };
+
+/**
+ * GET endpoint for debugging - confirms AGENT_URL is configured.
+ * Access via: GET /api/copilotkit
+ */
+export const GET = async () => {
+  const agentUrl = process.env.AGENT_URL;
+  return new Response(
+    JSON.stringify({
+      configured: !!agentUrl,
+      agentUrl: agentUrl ? `${agentUrl.substring(0, 30)}...` : null,
+    }),
+    { status: 200, headers: { "Content-Type": "application/json" } }
+  );
+};
