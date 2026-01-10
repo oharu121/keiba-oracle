@@ -49,6 +49,7 @@ app = FastAPI(
     description="Japanese Horse Racing Analysis Agent with Explicit Reasoning",
     version="0.1.0",
     lifespan=lifespan,
+    redirect_slashes=False,  # Prevent 307 redirects that break CopilotKit
 )
 
 # Configure CORS for frontend
