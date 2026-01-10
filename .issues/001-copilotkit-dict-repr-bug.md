@@ -22,17 +22,28 @@ Created `PatchedLangGraphAGUIAgent` subclass with `dict_repr()` method in `agent
 
 ---
 
-## Issue 2: FastAPI trailing slash redirect
+## Issue 2: CopilotKit route registration requires trailing slash
 
-FastAPI's default `redirect_slashes=True` causes 307 redirect from `/copilotkit` to `/copilotkit/`. CopilotKit's runtime doesn't follow POST redirects, causing silent failures.
+CopilotKit's `add_fastapi_endpoint` registers routes as `/{prefix}/{path:path}`, which means:
+- `/copilotkit/` works (path="" matches)
+- `/copilotkit` returns 404 (no route match)
+
+### Upstream Issue
+https://github.com/CopilotKit/CopilotKit/issues/1907
 
 ### Root Cause
-- `POST /copilotkit` → 307 redirect to `/copilotkit/`
-- CopilotKit runtime doesn't follow 307 redirects for POST requests (security behavior)
-- Request fails silently, returning empty agents list
+- CopilotKit SDK route pattern requires trailing slash
+- FastAPI's `redirect_slashes=True` redirects `/copilotkit` → `/copilotkit/` (307)
+- CopilotKit's `@copilotkit/runtime` doesn't follow 307 redirects for POST requests
+- Result: empty agents list returned to frontend
 
 ### Fix
-Added `redirect_slashes=False` to FastAPI app constructor in `agent/app/main.py`.
+**AGENT_URL must include trailing slash:** `https://your-backend.com/copilotkit/`
+
+This is documented in:
+- `web/.env.local.example`
+- `agent/app/main.py` (comment)
 
 ### Status
-- [x] Fix applied (v0.2.2)
+- [x] Documentation added (v0.2.2)
+- [ ] Upstream fix released (CopilotKit SDK handles both URL formats)

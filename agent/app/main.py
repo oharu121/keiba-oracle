@@ -44,12 +44,13 @@ async def lifespan(app: FastAPI):
 
 
 # Create FastAPI app
+# Note: CopilotKit SDK requires trailing slash in AGENT_URL (e.g., /copilotkit/)
+# See: https://github.com/CopilotKit/CopilotKit/issues/1907
 app = FastAPI(
     title="Keiba Oracle Agent",
     description="Japanese Horse Racing Analysis Agent with Explicit Reasoning",
     version="0.1.0",
     lifespan=lifespan,
-    redirect_slashes=False,  # Prevent 307 redirects that break CopilotKit
 )
 
 # Configure CORS for frontend

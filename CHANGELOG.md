@@ -5,12 +5,22 @@ All notable changes to Keiba Oracle will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2026-01-10
+
+### Fixed
+
+- **CopilotKit trailing slash requirement**: Documented that `AGENT_URL` must include trailing slash
+  (e.g., `/copilotkit/`) due to CopilotKit SDK route registration pattern
+  (upstream bug: [CopilotKit#1907](https://github.com/CopilotKit/CopilotKit/issues/1907))
+
+---
+
 ## [0.2.2] - 2026-01-10
 
 ### Fixed
 
 - **FastAPI trailing slash redirect**: Added `redirect_slashes=False` to prevent 307 redirects
-  that broke CopilotKit runtime's POST requests to `/copilotkit` endpoint
+  (reverted in 0.2.3 - incorrect fix)
 
 ---
 
@@ -106,6 +116,7 @@ START → Scout → Strategist → Auditor → END
 
 ---
 
+[0.2.3]: https://github.com/user/keiba-oracle/releases/tag/v0.2.3
 [0.2.2]: https://github.com/user/keiba-oracle/releases/tag/v0.2.2
 [0.2.1]: https://github.com/user/keiba-oracle/releases/tag/v0.2.1
 [0.2.0]: https://github.com/user/keiba-oracle/releases/tag/v0.2.0
