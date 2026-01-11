@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CopilotKit agent registration**: Switched from `remoteEndpoints: [{ url }]` to `LangGraphAgent`
   configuration because `CopilotRuntime.assignEndpointsToAgents()` returns empty object for basic
   `CopilotKitEndpoint` type, causing "Agent not found" error on frontend
+- **CopilotKit provider default agent**: Added `agent="keiba-oracle"` prop to `<CopilotKit>` provider
+  to fix "Agent 'default' not found" error (provider defaults to `"default"` agent)
 
 ### Changed
 

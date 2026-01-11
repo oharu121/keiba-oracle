@@ -28,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
       >
-        <CopilotKit runtimeUrl="/api/copilotkit">
+        <CopilotKit runtimeUrl="/api/copilotkit" agent="keiba-oracle">
           {children}
         </CopilotKit>
       </body>
