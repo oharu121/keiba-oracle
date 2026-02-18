@@ -44,24 +44,23 @@ export function useKeibaOracle() {
   // Local state for pulse animation
   const [pulsingNode, setPulsingNode] = useState<NodeType | null>(null);
 
-  // Detect node changes and trigger callbacks
+  // Detect node changes, trigger callbacks, and pulse animation
   useEffect(() => {
     const currentNode = state?.active_node || "idle";
 
     if (currentNode !== previousNode.current) {
       previousNode.current = currentNode;
 
-      // Trigger pulse animation
-      setPulsingNode(currentNode);
-      const timeout = setTimeout(() => setPulsingNode(null), 1000);
-
       // Notify all registered callbacks
       onNodeChangeCallbacks.current.forEach((callback) => {
         callback(currentNode);
       });
-
-      return () => clearTimeout(timeout);
     }
+
+    // Trigger pulse animation via microtask to avoid synchronous setState in effect
+    queueMicrotask(() => setPulsingNode(currentNode));
+    const timeout = setTimeout(() => setPulsingNode(null), 1000);
+    return () => clearTimeout(timeout);
   }, [state?.active_node]);
 
   // Register a callback for node changes

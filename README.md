@@ -55,6 +55,7 @@ A multi-agent system that demonstrates transparent AI decision-making using Lang
 
 - Python 3.12+
 - Node.js 18+
+- [pnpm](https://pnpm.io/) (Node.js package manager)
 - [uv](https://github.com/astral-sh/uv) (Python package manager)
 - Google API Key (for Gemini)
 - Tavily API Key (for search)
@@ -94,10 +95,10 @@ cd web
 cp .env.local.example .env.local
 
 # Install dependencies
-npm install
+pnpm install
 
 # Run the dev server
-npm run dev
+pnpm run dev
 ```
 
 ### 4. Open the App
@@ -197,7 +198,7 @@ AGENT_URL=http://localhost:8000/copilotkit  # Backend URL
 cd agent && uv run uvicorn app.main:app --reload
 
 # Frontend with hot reload
-cd web && npm run dev
+cd web && pnpm run dev
 
 # Test backend directly
 curl -X POST "http://localhost:8000/test?query=Tokyo%20racecourse%20conditions"

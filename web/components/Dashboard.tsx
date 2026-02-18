@@ -18,7 +18,6 @@ import { useKeibaOracle } from "@/hooks/useKeibaOracle";
 
 export function Dashboard() {
   const {
-    state,
     isLoading,
     isActive,
     sendQuery,

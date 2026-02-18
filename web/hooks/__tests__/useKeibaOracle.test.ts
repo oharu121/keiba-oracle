@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { renderHook, act, waitFor } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react";
 import type { OracleState } from "@/lib/types";
 
 // Default state matching the hook's DEFAULT_STATE
@@ -271,16 +271,20 @@ describe("useKeibaOracle", () => {
   });
 
   describe("pulsingNode", () => {
-    it("is set to current node on initial render", () => {
+    it("is set to current node after microtask flush", async () => {
       const { result } = renderHook(() => useKeibaOracle());
-      // On initial render, pulsingNode is set to the active_node
+
+      // Flush the queueMicrotask that sets pulsingNode
+      await act(async () => {});
+
       expect(result.current.pulsingNode).toBe("idle");
     });
 
     it("clears after timeout", async () => {
       const { result } = renderHook(() => useKeibaOracle());
 
-      // Initially set to idle
+      // Flush the queueMicrotask that sets pulsingNode
+      await act(async () => {});
       expect(result.current.pulsingNode).toBe("idle");
 
       // Advance timer past 1000ms timeout

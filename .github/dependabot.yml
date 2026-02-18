@@ -18,6 +18,23 @@ updates:
       - "dependencies"
       - "npm"
 
+  # Check for npm dependency updates in web/
+  - package-ecosystem: "npm"
+    directory: "/web"
+    schedule:
+      interval: "weekly"
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "npm"
+
   # Check for GitHub Actions updates
   - package-ecosystem: "github-actions"
     directory: "/"

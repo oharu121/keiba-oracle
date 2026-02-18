@@ -7,7 +7,13 @@
       "Bash(curl:*)",
       "Bash(pip index:*)",
       "Bash(pip3 index:*)",
-      "Bash(git check-ignore:*)"
+      "Bash(git check-ignore:*)",
+      "Bash(pnpm --version:*)",
+      "Bash(pnpm install)",
+      "Bash(pnpm approve-builds:*)",
+      "Bash(pnpm run test:web:*)",
+      "Bash(pnpm run lint:web:*)",
+      "Bash(pnpm run build:web)"
     ]
   }
 }
