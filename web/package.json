@@ -22,7 +22,7 @@
     "@copilotkit/runtime": "^1.50.0",
     "framer-motion": "^12.0.0",
     "clsx": "^2.1.0",
-    "tailwind-merge": "^2.5.0"
+    "tailwind-merge": "^3.4.1"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
