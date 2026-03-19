@@ -14,13 +14,13 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "next": "16.1.6",
+    "next": "16.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "@copilotkit/react-core": "^1.53.0",
-    "@copilotkit/react-ui": "^1.53.0",
-    "@copilotkit/runtime": "^1.53.0",
-    "framer-motion": "^12.35.2",
+    "@copilotkit/react-core": "^1.54.0",
+    "@copilotkit/react-ui": "^1.54.0",
+    "@copilotkit/runtime": "^1.54.0",
+    "framer-motion": "^12.38.0",
     "clsx": "^2.1.0",
     "tailwind-merge": "^3.5.0"
   },
@@ -40,7 +40,7 @@
     "@vitejs/plugin-react": "^5.1.4",
     "@vitest/coverage-v8": "^2.0.0",
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint-config-next": "16.2.0",
     "jsdom": "^28.1.0",
     "tailwindcss": "^4",
     "typescript": "^5",
