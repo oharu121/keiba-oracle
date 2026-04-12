@@ -17,9 +17,9 @@
     "next": "16.2.3",
     "react": "19.2.5",
     "react-dom": "19.2.5",
-    "@copilotkit/react-core": "^1.55.1",
-    "@copilotkit/react-ui": "^1.55.1",
-    "@copilotkit/runtime": "^1.55.1",
+    "@copilotkit/react-core": "^1.55.3",
+    "@copilotkit/react-ui": "^1.55.3",
+    "@copilotkit/runtime": "^1.55.3",
     "framer-motion": "^12.38.0",
     "clsx": "^2.1.0",
     "tailwind-merge": "^3.5.0"
