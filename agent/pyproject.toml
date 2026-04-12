@@ -18,7 +18,7 @@ dependencies = [
 
     # FastAPI & Web
     "fastapi>=0.135.3",
-    "uvicorn[standard]>=0.32.0",
+    "uvicorn[standard]>=0.44.0",
 
     # AG-UI Protocol for CopilotKit
     "copilotkit>=0.1.0",
