@@ -7,10 +7,10 @@ requires-python = ">=3.12"
 dependencies = [
     # LangGraph & LangChain Core
     "langgraph>=1.1.6",
-    "langchain-core>=0.3.0",
+    "langchain-core>=1.2.30",
 
     # Google Generative AI SDK (Gemini 3)
-    "google-genai>=1.72.0",
+    "google-genai>=1.73.1",
 
     # Tavily Search
     "langchain-tavily>=0.2.17",
@@ -21,10 +21,10 @@ dependencies = [
     "uvicorn[standard]>=0.44.0",
 
     # AG-UI Protocol for CopilotKit
-    "copilotkit>=0.1.0",
+    "copilotkit>=0.1.87",
 
     # Pydantic for State Models
-    "pydantic>=2.10.0",
+    "pydantic>=2.13.1",
 
     # Environment & Utilities
     "python-dotenv>=1.2.2",
