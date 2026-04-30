@@ -6,18 +6,18 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     # LangGraph & LangChain Core
-    "langgraph>=1.1.9",
+    "langgraph>=1.1.10",
     "langchain-core>=1.2.30",
 
     # Google Generative AI SDK (Gemini 3)
-    "google-genai>=1.73.1",
+    "google-genai>=1.74.0",
 
     # Tavily Search
     "langchain-tavily>=0.2.18",
-    "tavily-python>=0.7.23",
+    "tavily-python>=0.7.24",
 
     # FastAPI & Web
-    "fastapi>=0.136.0",
+    "fastapi>=0.136.1",
     "uvicorn[standard]>=0.46.0",
 
     # AG-UI Protocol for CopilotKit
@@ -40,7 +40,7 @@ packages = ["app"]
 
 [dependency-groups]
 dev = [
-    "pyright>=1.1.407",
+    "pyright>=1.1.409",
     "pytest>=9.0.3",
     "pytest-asyncio>=0.24",
     "pytest-cov>=7.1.0",
