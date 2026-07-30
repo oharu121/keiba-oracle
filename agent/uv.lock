@@ -497,7 +497,7 @@ wheels = [
 
 [[package]]
 name = "fastapi"
-version = "0.139.2"
+version = "0.141.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "annotated-doc" },
@@ -506,9 +506,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "typing-inspection" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cd/95/d3f0ae10836324a2eab98a52b61210ac609f08200bf4bb0dc8132d32f78a/fastapi-0.139.2.tar.gz", hash = "sha256:333145a6891e9b5b3cfceb69baf817e8240cde4d4588ae5a10bf56ffacb6255e", size = 423428, upload-time = "2026-07-16T15:06:17.912Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8a/02/91e3416a8fdd715abb903a952a6bec7cdd8d14eed55d415fc8595524c319/fastapi-0.141.1.tar.gz", hash = "sha256:e8822fc40db1e1858054d7a949a888695bc9bdce70139178e33bd2871a453ca1", size = 425799, upload-time = "2026-07-29T17:18:05.568Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5f/c7/cb03251d9dfb177246a9809a76f189d21df32dbd4a845951881d11323b7f/fastapi-0.139.2-py3-none-any.whl", hash = "sha256:b9ad015a835173d59865e2f5d8296fbc2b317bf56a2ba1a5bfbdd03de2fd4b1c", size = 130234, upload-time = "2026-07-16T15:06:19.557Z" },
+    { url = "https://files.pythonhosted.org/packages/cb/03/10388a42375ee7e4ac9b94eb2c5c569c8b5795e377e701c9ac3ad63de890/fastapi-0.141.1-py3-none-any.whl", hash = "sha256:bfb91aa2d334c61cb35ba9a116fc123b3d3df31640b801cf57a7a78ec3f603b3", size = 131954, upload-time = "2026-07-29T17:18:04.364Z" },
 ]
 
 [[package]]
@@ -620,7 +620,7 @@ requests = [
 
 [[package]]
 name = "google-genai"
-version = "2.14.0"
+version = "2.15.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -634,9 +634,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "websockets" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/dc/df/4f820054c99f29f2fe3de4a8a7c9534dd795302e4a07483a0cb07c3a29b6/google_genai-2.14.0.tar.gz", hash = "sha256:a9d1f4f362d76280f1be1340fcb3c86e63dbca128f6a4ae09d86ab47ff7148e8", size = 641055, upload-time = "2026-07-22T21:35:44.717Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/69/53/b2c9b0a74b817a393d388a2303ec4da8bda27ea744b23914480d1b024d84/google_genai-2.15.0.tar.gz", hash = "sha256:ef71bdb79ce9931bca1cf0a393c8cfb606e1075b6100fcdde02b7b467db8235d", size = 640674, upload-time = "2026-07-29T17:43:21.853Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ba/86/5ac5fb53e44cca4a6607fb917eb331fa237c65a103b9ec2e8e8acc8a42db/google_genai-2.14.0-py3-none-any.whl", hash = "sha256:ae7172cdd35695189b516b33a878e4132e5daa2dbc03a5b44cddfa8a82fad664", size = 1030738, upload-time = "2026-07-22T21:35:42.785Z" },
+    { url = "https://files.pythonhosted.org/packages/cf/86/2ef6d992955307bf525f305b44cb3e2066eb01636549607082a0407f7047/google_genai-2.15.0-py3-none-any.whl", hash = "sha256:f322a94c3c1ddb1b1cc536086708f5f8e13101347d062f63dcd7947b598c1d16", size = 1030459, upload-time = "2026-07-29T17:43:20.286Z" },
 ]
 
 [[package]]
@@ -782,12 +782,12 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "copilotkit", specifier = ">=0.1.94" },
-    { name = "fastapi", specifier = ">=0.139.2" },
-    { name = "google-genai", specifier = ">=2.14.0" },
+    { name = "fastapi", specifier = ">=0.141.1" },
+    { name = "google-genai", specifier = ">=2.15.0" },
     { name = "httpx", specifier = ">=0.28.0" },
-    { name = "langchain-core", specifier = ">=1.5.0" },
+    { name = "langchain-core", specifier = ">=1.5.2" },
     { name = "langchain-tavily", specifier = ">=0.2.18" },
-    { name = "langgraph", specifier = ">=1.2.9" },
+    { name = "langgraph", specifier = ">=1.2.10" },
     { name = "pydantic", specifier = ">=2.13.4" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "tavily-python", specifier = ">=0.7.26" },
@@ -820,7 +820,7 @@ wheels = [
 
 [[package]]
 name = "langchain-core"
-version = "1.5.0"
+version = "1.5.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jsonpatch" },
@@ -833,9 +833,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "uuid-utils" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5c/05/986c4bb148285791eb59994e0b28947bed96cac7f24467079e4274952a37/langchain_core-1.5.0.tar.gz", hash = "sha256:e1fa09d55b354192c8f60dade06a55bd6add2318c822a684555b8d4a30a16143", size = 967401, upload-time = "2026-07-21T03:37:26.48Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6e/58/3ad53096eee1e07728e8219ded30ae308b0f2b8b7b26b8ebb6371917c0f5/langchain_core-1.5.2.tar.gz", hash = "sha256:2d13ab35b42eec63d4669a483776b8cdd778ee764107149369fb369d84c08c41", size = 972322, upload-time = "2026-07-28T16:38:37.977Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/29/56/5ef7ba14bac95b0344da18c6e8ec108dce0baf5fc054d1117702f92af29d/langchain_core-1.5.0-py3-none-any.whl", hash = "sha256:f122efee35446632b38687119fca33711abbf3b6b555e31156762298fbe78a65", size = 558510, upload-time = "2026-07-21T03:37:24.423Z" },
+    { url = "https://files.pythonhosted.org/packages/ca/e4/024e402a65f5ee2eb6ae9667b5ffc5f08776cb4e712f5a11ee1997d56083/langchain_core-1.5.2-py3-none-any.whl", hash = "sha256:a687dd7c3b22c6c1294e1c1eeb61fb6f3a308e6015a1d75b576b3836ad5b5aed", size = 561643, upload-time = "2026-07-28T16:38:36.38Z" },
 ]
 
 [[package]]
@@ -867,7 +867,7 @@ wheels = [
 
 [[package]]
 name = "langgraph"
-version = "1.2.9"
+version = "1.2.10"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "langchain-core" },
@@ -877,9 +877,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "xxhash" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/41/4b/0d1130e26b41a99dcc88353bbe7162a1f255c4db746bd94024268e6af27b/langgraph-1.2.9.tar.gz", hash = "sha256:385f87bc1802c35af7e0aa479278ecba8582d103515eb48256cb2ddcd42d0bd4", size = 722869, upload-time = "2026-07-10T01:30:14.985Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/70/1d/a32f3caf4b3d60651656c0d64976b48d168653e81c71bb7512e9a31541aa/langgraph-1.2.10.tar.gz", hash = "sha256:05a183a746ed570a06c7c1b879920163509a75df9e44e92dd2238218d677fd37", size = 723404, upload-time = "2026-07-28T18:33:51.441Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/41/16/0b8dc48823f1326f3e0c8012a3c07a40da6f194299e2ec080df236287baf/langgraph-1.2.9-py3-none-any.whl", hash = "sha256:c2d98ad94333937922ba04148641c1da2bfe45b5b8e55d7b6dcb0bb2df809e76", size = 247473, upload-time = "2026-07-10T01:30:13.733Z" },
+    { url = "https://files.pythonhosted.org/packages/e2/4d/3fc3e2535ee2c731130d71371848ebc6d4a9d2e8ae6060b11987ba134951/langgraph-1.2.10-py3-none-any.whl", hash = "sha256:52c48bd42fa31a1de0e1c0f0ebfe342e11ca2957b8b3563f83dbd60d8e30f921", size = 247753, upload-time = "2026-07-28T18:33:50.028Z" },
 ]
 
 [[package]]
