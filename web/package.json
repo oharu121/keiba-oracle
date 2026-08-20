@@ -20,7 +20,7 @@
     "@copilotkit/react-core": "^1.66.4",
     "@copilotkit/react-ui": "^1.66.4",
     "@copilotkit/runtime": "^1.66.4",
-    "framer-motion": "^12.43.0",
+    "framer-motion": "^13.1.0",
     "clsx": "^2.1.0",
     "tailwind-merge": "^3.6.0"
   },
